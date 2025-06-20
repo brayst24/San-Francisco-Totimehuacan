@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>San Francisco Totimehuacán</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+      color: white;
+      padding: 20px;
+      margin: 0;
+    }
+
+    .contenedor {
+      max-width: 800px;
+      margin: 60px auto;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 20px 30px;
+      border-radius: 12px;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    /* Presentación / info adicional */
+    .info-adicional {
+      margin-bottom: 40px;
+      text-align: justify;
+      font-size: 18px;
+      line-height: 1.6;
+    }
+
+    /* Carrusel */
+    .carrusel {
+      position: relative;
+      overflow: hidden;
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 20px;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+    }
+
+    .slide {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .slide.activo {
+      display: flex;
+    }
+
+    img {
+      max-width: 100%;
+      border-radius: 10px;
+      max-height: 400px;
+      object-fit: cover;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    }
+
+    p {
+      margin-top: 15px;
+      font-size: 18px;
+      line-height: 1.4;
+    }
+
+    button {
+      position: absolute;
+      top: 50%;
+      background: rgba(0, 0, 0, 0.5);
+      border: none;
+      color: white;
+      font-size: 24px;
+      padding: 10px 16px;
+      cursor: pointer;
+      border-radius: 50%;
+      user-select: none;
+      transform: translateY(-50%);
+    }
+
+    .anterior {
+      left: 10px;
+    }
+
+    .siguiente {
+      right: 10px;
+    }
+
+    button:hover {
+      background: rgba(0, 0, 0, 0.8);
+    }
+
+    .puntos {
+      margin-top: 15px;
+      text-align: center;
+    }
+
+    .punto {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      margin: 0 6px;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 50%;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .punto.activo {
+      background: #5530fa;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="contenedor">
+    <h1>San Francisco Totimehuacán, Puebla</h1>
+
+    <!-- Presentación con datos -->
+    <div class="info-adicional">
+      <p>
+        San Francisco Totimehuacán es una junta auxiliar ubicada al sureste de la ciudad de Puebla, que destaca por su rica historia y su arraigada tradición cultural. Este lugar fue un importante asentamiento prehispánico y conserva hasta la fecha numerosas tradiciones indígenas que se mezclan con la influencia colonial.
+      </p>
+      <p>
+        Entre sus principales atractivos se encuentra el ex-convento franciscano construido en el siglo XVI, un edificio emblemático que representa la arquitectura colonial y el legado religioso de la región. Además, Totimehuacán es conocido por sus coloridas festividades, como la feria patronal, donde la música, la danza y la pirotecnia forman parte de las celebraciones que reúnen a la comunidad.
+      </p>
+      <p>
+        La zona también posee un gran valor arqueológico y paleontológico, ya que en sus alrededores se han encontrado fósiles de mamuts y restos de estructuras antiguas que nos hablan de su importancia en el pasado lejano. Su cercanía a la presa de Valsequillo hace que sea un lugar ideal para el ecoturismo y el avistamiento de aves, motivo por el cual su nombre significa “lugar donde abundan las aves”.
+      </p>
+      <p>
+        Hoy en día, San Francisco Totimehuacán conserva su identidad a través de sus barrios tradicionales como Santa Clara, Guadalupe Tlatelpa y San Miguel, donde las tradiciones continúan vivas y se transmiten de generación en generación. Es un destino que combina historia, cultura y naturaleza, perfecto para quienes desean conocer el corazón auténtico de Puebla.
+      </p>
+    </div>
+
+    <!-- Carrusel -->
+    <div class="carrusel" id="carrusel">
+      <button class="anterior" onclick="cambiarSlide(-1)">❮</button>
+
+      <div class="slide activo">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/d/d0/Ex-convento_de_San_Francisco_Totimehuac%C3%A1n.png" alt="Ex-convento" />
+        <p>Entre sus monumentos se encuentra el ex-convento franciscano, construido en el siglo XVI, una joya arquitectónica de estilo colonial.</p>
+      </div>
+
+      <div class="slide">
+        <img src="https://lamejor.com.mx/u/fotografias/m/2024/8/1/f960x540-20720_94795_5050.png" alt="Feria de San Francisco" />
+        <p>En sus barrios, como Santa Clara, Guadalupe Tlatelpa y San Miguel, se celebran fiestas tradicionales con música, pirotecnia y danzas.</p>
+      </div>
+
+      <div class="slide">
+        <img src="https://www.periodicoenfoque.com.mx/media/jact/big/images/2024/enero/31enero/huehues.jpeg" alt="Huehues" />
+        <p>La zona también es rica en hallazgos arqueológicos y paleontológicos, como fósiles de mamuts y estructuras antiguas.</p>
+      </div>
+
+      <button class="siguiente" onclick="cambiarSlide(1)">❯</button>
+
+      <div class="puntos" id="puntos"></div>
+    </div>
+  </div>
+
+  <script>
+    let indiceSlide = 0;
+    const slides = document.querySelectorAll(".slide");
+    const puntosContenedor = document.getElementById("puntos");
+    let intervalo;
+
+    function crearPuntos() {
+      slides.forEach((_, i) => {
+        const punto = document.createElement("span");
+        punto.classList.add("punto");
+        punto.addEventListener("click", () => {
+          indiceSlide = i;
+          mostrarSlide(indiceSlide);
+          actualizarPuntos();
+          reiniciarAutoplay();
+        });
+        puntosContenedor.appendChild(punto);
+      });
+    }
+
+    function actualizarPuntos() {
+      const puntos = document.querySelectorAll(".punto");
+      puntos.forEach((p, i) => {
+        p.classList.toggle("activo", i === indiceSlide);
+      });
+    }
+
+    function mostrarSlide(index) {
+      slides.forEach((slide) => slide.classList.remove("activo"));
+      slides[index].classList.add("activo");
+      actualizarPuntos();
+    }
+
+    function cambiarSlide(n) {
+      indiceSlide += n;
+      if (indiceSlide >= slides.length) indiceSlide = 0;
+      if (indiceSlide < 0) indiceSlide = slides.length - 1;
+      mostrarSlide(indiceSlide);
+      reiniciarAutoplay();
+    }
+
+    function iniciarAutoplay() {
+      intervalo = setInterval(() => {
+        cambiarSlide(1);
+      }, 5000);
+    }
+
+    function detenerAutoplay() {
+      clearInterval(intervalo);
+    }
+
+    function reiniciarAutoplay() {
+      detenerAutoplay();
+      iniciarAutoplay();
+    }
+
+    crearPuntos();
+    mostrarSlide(indiceSlide);
+    iniciarAutoplay();
+
+    const carrusel = document.getElementById("carrusel");
+    carrusel.addEventListener("mouseenter", detenerAutoplay);
+    carrusel.addEventListener("mouseleave", iniciarAutoplay);
+  </script>
+
+</body>
+
+</html>
